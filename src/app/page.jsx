@@ -25,6 +25,7 @@ const getBoards = async () => {
   };
 };
 
+
 export default async function Page() {
   const {boards, authUrl} = await getBoards();
 
