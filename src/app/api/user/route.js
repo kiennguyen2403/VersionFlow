@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic';
 import { mongoConnection } from "../../../utils/mongo-connection";
-import { createProject, getProject, getProjectById, getProjectByUserId ,deleteProject, updateProject } from "../../../utils/models-util/projects-utls";
+import { createUser, getUser, getUserById, getUserByProjectId ,deleteUser, updateUser } from "../../../utils/models-util/users-utils";
 
 export async function GET(request) {
     const { searchParams } = new URL(request.nextUrl);
@@ -8,14 +8,14 @@ export async function GET(request) {
     try {
         await mongoConnection();
         if (id) {
-            const project = await getProjectById(id);
+            const user = await getUserById(id);
             return Response.json({
-                project,
+                user,
             });
         } else {
-            const projects = await getProject();
+            const users = await getUser();
             return Response.json({
-                projects
+                users
             });
         }
     } catch (e) {
@@ -31,9 +31,9 @@ export async function POST(request) {
     try {
         const body = await request.json();
         await mongoConnection();
-        const project = await createProject(body);
+        const user = await createUser(body);
         return Response.json({
-            project,
+            user,
         });
     } catch (e) {
         return Response.json({
@@ -50,9 +50,9 @@ export async function PUT(request) {
     try {
         const body = await request.json();
         await mongoConnection();
-        const project = await updateProject(body);
+        const user = await updateUser(body);
         return Response.json({
-            project,
+            user,
         });
     } catch (e) {
         return Response.json({
@@ -69,9 +69,9 @@ export async function DELETE(request) {
         const { searchParams } = new URL(request.nextUrl);
         const id = searchParams.get('id');
         await mongoConnection();
-        const project = await deleteProject(id);
+        const user = await deleteUser(id);
         return Response.json({
-            project,
+            user,
         });
     } catch (e) {
         return Response.json({
@@ -80,5 +80,4 @@ export async function DELETE(request) {
             status: 500,
         });
     }
-
 }

@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic';
 import { mongoConnection } from "../../../utils/mongo-connection";
-import { createBoard, getBoard, getBoardById, getBoardByProjectId ,deleteBoard, updateBoard } from "../../../utils/models-util/boards-utls";
+import { createBoard, getBoard, getBoardById, getBoardByProjectId ,deleteBoard } from "../../../utils/models-util/boards-utils";
 
 export async function GET(request) {
     const { searchParams } = new URL(request.nextUrl);
@@ -46,22 +46,11 @@ export async function POST(request) {
 }
 
 export async function PUT(request) {
-
-    try {
-        const body = await request.json();
-        await mongoConnection();
-        const board = await updateBoard(body);
-        return Response.json({
-            board,
-        });
-    } catch (e) {
-        return Response.json({
-            error: e,
-        }, {
-            status: 500,
-        });
-    }
-
+    return Response.json({
+        error: 'Method is not supported',
+    }, {
+        status: 500,
+    });
 }
 
 export async function DELETE(request) {

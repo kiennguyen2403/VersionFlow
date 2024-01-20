@@ -10,9 +10,14 @@ export const createUser = async (name, email, password) => {
 };
 
 
-export const getUser = async (req, res) => {
+export const getUser = async () => {
     return await User.find();
 };
+
+export const getUserByEmail = async (email) => {
+    return await User.findOne({ email: email });
+};
+
 
 export const getUserById = async (req, res) => {
     return await User.findById(req.params.id);

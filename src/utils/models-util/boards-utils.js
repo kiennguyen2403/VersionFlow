@@ -1,22 +1,23 @@
-import Boarch from '../../models/boards';
+import Board from '../../model/board';
 
 export const createBoard = async (board) => {
-    const { id, name } = board;
-    const newBoard = new Boarch({
+    const { id, users, commits } = board;
+    const newBoard = new Board({
         id,
-        name,
+        users,
+        commits
     });
     await newBoard.save();
 };
 
 export const getBoard = async () => {
-    return await Boarch.find();
+    return await Board.find();
 };
 
 export const getBoardById = async (id) => {
-    return await Boarch.findById(id);
+    return await Board.findById(id);
 };
 
 export const deleteBoard = async (id) => {
-    return await Boarch.deleteOne({ _id: id });
+    return await Board.deleteOne({ _id: id });
 };

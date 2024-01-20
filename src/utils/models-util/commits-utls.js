@@ -1,16 +1,28 @@
-import Commit from '../../models/commit'
+import Commit from '../../model/commit'
 
 export const createCommit = async (commit) => {
-    const { id, name } = commit;
+    const {
+        boardId,
+        branchId,
+        previousCommitId,
+        message,
+        action,
+        content,
+
+    } = commit;
     const newCommit = new Commit({
-        id,
-        name,
+        boardId,
+        branchId,
+        previousCommitId,
+        message,
+        action,
+        content,
     });
     await newCommit.save();
 };
 
-export const getCommit = async () => {
-    return await Commit.find();
+export const getCommit = async (boardId) => {
+    return await Commit.find({ boardId: boardId });
 };
 
 export const getCommitById = async (id) => {
@@ -18,7 +30,7 @@ export const getCommitById = async (id) => {
 };
 
 export const getCommitByBranchId = async (id) => {
-    
+    return await Commit.find({ branchId: id });
 };
 
 export const deleteCommit = async (id) => {

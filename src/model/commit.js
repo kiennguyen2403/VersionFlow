@@ -31,7 +31,8 @@ const commitSchema = new mongoose.Schema({
         // maxlength: 32,
     },
     date: {
-        type: String,
+        type: Date,
+        value: Date.now(),
         trim: true,
         required: true,
         // maxlength: 32,

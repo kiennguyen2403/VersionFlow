@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic';
 import { mongoConnection } from "../../../utils/mongo-connection";
-import { createCommit, getCommit, getCommitById, getCommitByBranchId ,deleteCommit, updateCommit } from "../../../utils/models-util/commits-utls";
+import { createCommit, getCommit, getCommitById, getCommitByBranchId ,deleteCommit, updateCommit } from "../../../utils/models-util/commits-utils";
 
 export async function GET(request) {
     const { searchParams } = new URL(request.nextUrl);

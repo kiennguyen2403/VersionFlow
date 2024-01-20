@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic';
 import { mongoConnection } from "../../../utils/mongo-connection";
-import { createBranch, getBranch, getBranchById, getBranchByProjectId ,deleteBranch, updateBranch } from "../../../utils/models-util/branches-utls";
+import { createBranch, getBranch, getBranchById, getBranchByProjectId ,deleteBranch} from "../../../utils/models-util/branches-utils";
 
 export async function GET(request) {
     const { searchParams } = new URL(request.nextUrl);
@@ -30,6 +30,7 @@ export async function GET(request) {
 export async function POST(request) {
     try {
         const body = await request.json();
+        console.log(body);
         await mongoConnection();
         const branch = await createBranch(body);
         return Response.json({
