@@ -12,6 +12,7 @@
     "@emotion/styled": "^11.11.0",
     "@gitgraph/react": "^1.6.0",
     "@mirohq/miro-api": "^2.0.0",
+    "@mui/icons-material": "^5.15.5",
     "@mui/lab": "^5.0.0-alpha.161",
     "@mui/material": "^5.15.5",
     "@nextui-org/react": "^2.2.9",
