@@ -1,6 +1,5 @@
 import React from "react";
-import { CustomCommitTree } from "../components/custom-commit-tree";
-import { HomePage } from "../components/home-page";
+import Main from "../components/main";
 import initMiroAPI from "../utils/initMiroAPI";
 import "../assets/style.css";
 
@@ -31,12 +30,7 @@ export default async function Page() {
 
   return (
     <div className="grid">
-      <div className="cs1 ce12">
-        <CustomCommitTree />
-      </div>
-      <div className="cs13 ce24">
-        <HomePage />
-      </div>
+      <Main/>
     </div>
   );
 }
