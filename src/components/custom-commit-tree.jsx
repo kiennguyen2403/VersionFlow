@@ -6,10 +6,13 @@ import { set } from "mongoose";
 
 export const CustomCommitTree = () => {
   const [commits, setCommits] = useState([]);
+  const boardId = "board1";
   useEffect(() => {
     const fetchDatas = async () => {
       try {
-        const commits = await axios.get("http://localhost:3000/api/commits");
+        const commits = await axios.get(
+          `http://localhost:3000/api/commits/${boardId}`
+        );
         setCommits(commits.data);
       } catch (error) {
         console.log(error);
@@ -20,11 +23,13 @@ export const CustomCommitTree = () => {
   });
   const graphGenerator = (gitgraph) => {
     let currentBranch = {
-      object: gitgraph.branch("master"),
+      object: gitgraph.branch("main"),
       id: null,
     };
     commits.forEach((commit) => {
-      if (currentBranch.id === commit.branchID) {
+      console.log(commit);
+      if (currentBranch.id === commit.branch) {
+        console.log("matched branch");
         object.commit({
           subject: commit.commitMessage,
           onclick: () => {},
