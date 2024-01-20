@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CustomCommitTree } from "./custom-commit-tree";
 import { Typography } from "@mui/material";
 import { HomePage } from "./home-page";
@@ -9,7 +9,16 @@ export default function PageWrapper() {
   const [currentCommit, setCurrentCommit] = useState("Initial commit"); // change to commit hash later
   const [selectedCommit, setSelectedCommit] = useState(null);
   const [value, setValue] = useState(0);
-  console.log(selectedCommit);
+  const [boardId, setBoardId] = useState("");
+
+  useEffect(() => {
+    async function getBoard() {
+      const { id } = await miro.board.getInfo();
+      setBoardId(id);
+    }
+    getBoard();
+  }, []);
+
   return (
     <>
       <div className="grid">
@@ -28,6 +37,7 @@ export default function PageWrapper() {
             setSelectedCommit={setSelectedCommit}
             value={value}
             setValue={setValue}
+            board_id={boardId}
           />
         </div>
       </div>

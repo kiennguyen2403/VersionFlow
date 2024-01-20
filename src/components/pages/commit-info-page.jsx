@@ -1,10 +1,16 @@
-import React from "react";
-import { Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Button, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { LoadingButton } from "@mui/lab";
 
-export default function CommitInfoPage({ selectedCommit, setSelectedCommit }) {
+export default function CommitInfoPage({
+  selectedCommit,
+  setSelectedCommit,
+  handleClick,
+}) {
   // TODO: Update UI
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <>
       {selectedCommit ? (
@@ -27,18 +33,25 @@ export default function CommitInfoPage({ selectedCommit, setSelectedCommit }) {
           </Typography>
         </>
       )}
-      {/* <div>
-                <IconButton
-                    edge="start"
-                    color="inherit"
-                    aria-label="back"
-                    onClick={() => {
-                        setSelectedCommit(null);
-                    }}
-                >
-                    <ArrowBackIcon />
-                </IconButton>
-            </div> */}
+      <div>
+        <LoadingButton
+          onClick={async () => {
+            try {
+              setIsLoading(true);
+              await handleClick(0);
+              setIsLoading(false);
+            } catch (e) {
+              console.log(e);
+            }
+          }}
+          isLoading={isLoading}
+          variant="contained"
+          size="small"
+          fullWidth
+        >
+          Set miro board to this commit
+        </LoadingButton>
+      </div>
     </>
   );
 }
