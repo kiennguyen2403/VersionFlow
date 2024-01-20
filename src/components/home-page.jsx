@@ -51,14 +51,14 @@ export const HomePage = ({ selectedCommit, setSelectedCommit, value, setValue })
               <Tab label="Branches" />
             </Tabs>
           </Box>
-          {value === 0 && <CommitPage />}
-          {value === 1 && <BranchPage />}
-          {value === 2 && (
+          {value === 0 && (
             <CommitInfoPage
               selectedCommit={selectedCommit}
               setSelectedCommit={setSelectedCommit}
             />
           )}
+          {value === 1 && <CommitPage />}
+          {value === 2 && <BranchPage />}
         </Box>
       )}
     </div>

@@ -15,7 +15,7 @@ export function SampleCommitTree({
             subject: message,
             onClick(commit) {
                 setSelectedCommit(commit);
-                setValue(2);
+                setValue(0);
             },
         };
         return param;
