@@ -2,7 +2,6 @@
 import React, { useState, useEffect, use } from "react";
 import { Gitgraph } from "@gitgraph/react";
 import axios from "axios";
-import { set } from "mongoose";
 
 export const CustomCommitTree = () => {
   const [commits, setCommits] = useState([]);

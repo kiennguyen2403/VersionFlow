@@ -13,7 +13,7 @@ async function addSticky() {
 }
 
 async function getBoard() {
-  const board = await miro.board.info.get();
+  const board = await miro.board.infor.get();
   console.log(board);
 }
 
@@ -24,6 +24,11 @@ async function getItems() {
 
 export const HomePage = () => {
   const [value, setValue] = useState(0);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -31,37 +36,35 @@ export const HomePage = () => {
 
   return (
     <div>
-      <Box sx={{ width: "100%" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            sx={{
-              width: "100%",
-            }}
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
-            <Tab
-              label="Commit"
+      {isClient && (
+        <Box sx={{ width: "100%" }}>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
               sx={{
-                width: "50%",
+                width: "100%",
               }}
-            />
-            <Tab
-              label="Branches"
-              sx={{
-                width: "50%",
-              }}
-            />
-          </Tabs>
+              value={value}
+              onChange={handleChange}
+              aria-label="basic tabs example"
+            >
+              <Tab
+                label="Commit"
+                sx={{
+                  width: "50%",
+                }}
+              />
+              <Tab
+                label="Branches"
+                sx={{
+                  width: "50%",
+                }}
+              />
+            </Tabs>
+          </Box>
+          {value === 0 && <CommitPage />}
+          {value === 1 && <BranchPage />}
         </Box>
-        {value === 0 && <CommitPage />}
-        {value === 1 && (
-          <Typography>
-            <BranchPage />
-          </Typography>
-        )}
-      </Box>
+      )}
     </div>
   );
 };

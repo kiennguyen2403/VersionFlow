@@ -1,11 +1,11 @@
-import React from 'react';
-import { CustomCommitTree } from '../components/custom-commit-tree';
-
-import initMiroAPI from '../utils/initMiroAPI';
-import '../assets/style.css';
+import React from "react";
+import { CustomCommitTree } from "../components/custom-commit-tree";
+import { HomePage } from "../components/home-page";
+import initMiroAPI from "../utils/initMiroAPI";
+import "../assets/style.css";
 
 const getBoards = async () => {
-  const {miro, userId} = initMiroAPI();
+  const { miro, userId } = initMiroAPI();
 
   // redirect to auth url if user has not authorized the app
   if (!userId || !(await miro.isAuthorized(userId))) {
@@ -26,13 +26,17 @@ const getBoards = async () => {
   };
 };
 
-
 export default async function Page() {
-  const {boards, authUrl} = await getBoards();
+  const { boards, authUrl } = await getBoards();
 
   return (
-    <div>
-      <CustomCommitTree />
+    <div className="grid">
+      <div className="cs1 ce12">
+        <CustomCommitTree />
+      </div>
+      <div className="cs13 ce24">
+        <HomePage />
+      </div>
     </div>
   );
 }
