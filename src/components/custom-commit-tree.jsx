@@ -9,6 +9,7 @@ export const CustomCommitTree = ({
     setCurrentCommit,
     selectedCommit,
     setSelectedCommit,
+    setValue,
 }) => {
     const [commits, setCommits] = useState([]);
     const boardId = "board1";
@@ -84,6 +85,7 @@ export const CustomCommitTree = ({
                 setCurrentCommit={setCurrentCommit}
                 selectedCommit={selectedCommit}
                 setSelectedCommit={setSelectedCommit}
+                setValue={setValue}
             />
         </div>
     );

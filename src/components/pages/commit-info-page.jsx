@@ -4,19 +4,30 @@ import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function CommitInfoPage({ selectedCommit, setSelectedCommit }) {
-    // TODO: Update UI
-    return (
+  // TODO: Update UI
+  return (
+    <>
+      {selectedCommit ? (
         <>
-            <Typography variant="body1" gutterBottom>
-                Commit message: {selectedCommit.subject}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-                Author: {selectedCommit.author.name}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-                Date: {new Date(selectedCommit.author.timestamp).toDateString()}
-            </Typography>
-            <div>
+          <Typography variant="body1" gutterBottom>
+            Commit message: {selectedCommit?.subject ?? ""}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            Author: {selectedCommit?.author.name ?? ""}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            Date:{" "}
+            {new Date(selectedCommit?.author?.timestamp).toDateString() ?? ""}
+          </Typography>
+        </>
+      ) : (
+        <>
+          <Typography variant="body1" gutterBottom>
+            No commit selected
+          </Typography>
+        </>
+      )}
+      {/* <div>
                 <IconButton
                     edge="start"
                     color="inherit"
@@ -27,7 +38,7 @@ export default function CommitInfoPage({ selectedCommit, setSelectedCommit }) {
                 >
                     <ArrowBackIcon />
                 </IconButton>
-            </div>
-        </>
-    );
+            </div> */}
+    </>
+  );
 }

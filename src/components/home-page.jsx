@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { CustomCommitTree } from "./custom-commit-tree";
 import { Tabs, Tab, Typography, Box } from "@mui/material";
 import { CommitPage } from "./pages/commit-page";
 import { BranchPage } from "./pages/branch-page";
+import CommitInfoPage from "./pages/commit-info-page";
 
 async function addSticky() {
   const stickyNote = await miro.board.createStickyNote({
@@ -22,8 +22,7 @@ async function getItems() {
   console.log(items);
 }
 
-export const HomePage = () => {
-  const [value, setValue] = useState(0);
+export const HomePage = ({ selectedCommit, setSelectedCommit, value, setValue }) => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -47,22 +46,19 @@ export const HomePage = () => {
               onChange={handleChange}
               aria-label="basic tabs example"
             >
-              <Tab
-                label="Commit"
-                sx={{
-                  width: "50%",
-                }}
-              />
-              <Tab
-                label="Branches"
-                sx={{
-                  width: "50%",
-                }}
-              />
+              <Tab label="Details" />
+              <Tab label="Commit" />
+              <Tab label="Branches" />
             </Tabs>
           </Box>
           {value === 0 && <CommitPage />}
           {value === 1 && <BranchPage />}
+          {value === 2 && (
+            <CommitInfoPage
+              selectedCommit={selectedCommit}
+              setSelectedCommit={setSelectedCommit}
+            />
+          )}
         </Box>
       )}
     </div>

@@ -8,13 +8,14 @@ export function SampleCommitTree({
     setCurrentCommit,
     selectedCommit,
     setSelectedCommit,
+    setValue,
 }) {
     function messageWithClick(message) {
         const param = {
             subject: message,
             onClick(commit) {
-                alert(`Commit ${commit.hash} selected`);
                 setSelectedCommit(commit);
+                setValue(2);
             },
         };
         return param;
