@@ -42,6 +42,7 @@ export default function CommitInfoPage({
               setIsLoading(false);
             } catch (e) {
               console.log(e);
+              setIsLoading(false);
             }
           }}
           isLoading={isLoading}

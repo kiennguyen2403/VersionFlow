@@ -3,7 +3,7 @@ import { TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
 
-export const CommitPage = () => {
+export const CommitPage = ({ setCurrentCommit }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [commitMessage, setCommitMessage] = useState("");
 
@@ -19,7 +19,14 @@ export const CommitPage = () => {
         justifyContent: "center",
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px", width :"100%" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          width: "100%",
+        }}
+      >
         <div style={{ width: "100%" }}>
           <TextField
             id="commit-message"
@@ -34,9 +41,14 @@ export const CommitPage = () => {
         </div>
         <LoadingButton
           onClick={async () => {
-            setIsLoading(true);
-            await addSticky();
-            setIsLoading(false);
+            try {
+              setIsLoading(true);
+              setIsLoading(false);
+              // setCurrentCommit(commitMessage);
+            } catch (e) {
+              console.log(e);
+              setIsLoading(false);
+            }
           }}
           loading={isLoading}
           variant="contained"

@@ -22,9 +22,9 @@ export const CustomCommitTree = ({
                 console.log(error);
             }
         };
-
         fetchDatas();
-    });
+    }, [currentCommit]);
+    
     const graphGenerator = (gitgraph) => {
         let currentBranch = {
             object: gitgraph.branch("main"),

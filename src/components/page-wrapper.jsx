@@ -35,6 +35,8 @@ export default function PageWrapper() {
           <HomePage
             selectedCommit={selectedCommit}
             setSelectedCommit={setSelectedCommit}
+            currentCommit={currentCommit}
+            setCurrentCommit={setCurrentCommit}
             value={value}
             setValue={setValue}
             board_id={boardId}

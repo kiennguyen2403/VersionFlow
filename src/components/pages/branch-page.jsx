@@ -4,7 +4,7 @@ import { TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import UploadIcon from "@mui/icons-material/Upload";
 
-export const BranchPage = () => {
+export const BranchPage = ({ setCurrentCommit }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [branch, setBranch] = useState("");
 
@@ -43,9 +43,15 @@ export const BranchPage = () => {
         </div>
         <LoadingButton
           onClick={async () => {
-            setIsLoading(true);
-            await addSticky();
-            setIsLoading(false);
+            try {
+              setIsLoading(true);
+              // await addSticky();
+              setIsLoading(false);
+              // setCurrentCommit(id)
+            } catch (e) {
+              console.log(e);
+              setIsLoading(false);
+            }
           }}
           loading={isLoading}
           variant="contained"
