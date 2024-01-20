@@ -15,11 +15,7 @@ export default function RootLayout({ children }) {
           strategy="beforeInteractive"
         />
         <MiroSDKInit />
-        <div id="root">
-          <div className="grid">
-              {children}
-          </div>
-        </div>
+        <div id="root">{children}</div>
       </body>
     </html>
   );

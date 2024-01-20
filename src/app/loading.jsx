@@ -1,25 +1,23 @@
 import React from "react";
-import { Card, Skeleton } from "@nextui-org/react";
+import { Card, Skeleton, Stack } from "@mui/material";
 
 const Loading = () => {
   return (
     <div>
-      <Card className="w-[200px] space-y-5 p-4" radius="lg">
-        <Skeleton isLoaded={true} className="rounded-lg">
-          <div className="h-24 rounded-lg bg-secondary"></div>
-        </Skeleton>
-        <div className="space-y-3">
-          <Skeleton isLoaded={true} className="w-3/5 rounded-lg">
-            <div className="h-3 w-full rounded-lg bg-secondary"></div>
-          </Skeleton>
-          <Skeleton isLoaded={true} className="w-4/5 rounded-lg">
-            <div className="h-3 w-full rounded-lg bg-secondary-300"></div>
-          </Skeleton>
-          <Skeleton isLoaded={true} className="w-2/5 rounded-lg">
-            <div className="h-3 w-full rounded-lg bg-secondary-200"></div>
-          </Skeleton>
-        </div>
-      </Card>
+      <Stack spacing={1} width="100%" height="100%">
+        {/* For variant="text", adjust the height via font-size */}
+        {/* For other variants, adjust the size with `width` and `height` */}
+
+        <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+        {/* For other variants, adjust the size with `width` and `height` */}
+        <Skeleton variant="rectangular" width="100%" height="20vh" />
+        <Skeleton variant="rectangular" width="100%" height="10vh" />
+        <Skeleton variant="rectangular" width="100%" height="20vh" />
+        <Skeleton variant="rectangular" width="100%" height="10vh" />
+        <Skeleton variant="text" sx={{ fontSize: "3rem" }} />
+        <Skeleton variant="text" sx={{ fontSize: "2rem" }} />
+        {/* For other variants, adjust the size with `width` and `height` */}
+      </Stack>
     </div>
   );
 };
