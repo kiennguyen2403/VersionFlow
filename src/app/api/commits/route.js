@@ -6,11 +6,13 @@ import {
   getCommitById,
   deleteCommit,
   updateCommit,
+  getCommitByBoardId
 } from "../../../utils/models-util/commits-utils";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.nextUrl);
-  const id = searchParams.get("id");
+  const id = searchParams.get("id") ?? "";
+  const boardId = searchParams.get("boardId") ?? "";
   try {
     await mongoConnection();
     if (id) {
@@ -18,7 +20,13 @@ export async function GET(request) {
       return Response.json({
         commit,
       });
-    } else {
+    } else if (boardId) {
+      const commits = await getCommitByBoardId(boardId);
+      return Response.json({
+        commits,
+      });
+    }
+    else {
       const commits = await getCommit();
       return Response.json({
         commits,
