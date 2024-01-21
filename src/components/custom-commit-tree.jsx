@@ -32,9 +32,13 @@ export const CustomCommitTree = ({
       const response = await axios.get(`http://localhost:3000/api/commits?boardId=${boardId}`);
       const commits = response.data.commits;
       setCommits(commits);
-      console.log("commits", commits);
-      const commitsInMainBranch = commits.filter((commit) => commit.branch === "main");
-      if (currentCommit === "Initial commit" && commitsInMainBranch.length - 1) {
+      const commitsInMainBranch = commits.filter(
+        (commit) => commit.branch === "main"
+      );
+      if (
+        currentCommit === "Initial commit" &&
+        commitsInMainBranch.length - 1
+      ) {
         setCurrentCommit(commitsInMainBranch[commitsInMainBranch.length - 1]);
       }
     } catch (error) {
@@ -50,7 +54,7 @@ export const CustomCommitTree = ({
   function messageWithClick(commit) {
     const param = {
       subject: commit.message,
-      body: commit.id + "," + commit.branch,
+      body: commit.id +","+ commit.branch +","+commit._id,
       onClick(commit) {
         setSelectedCommit(commit);
         setCurrentCommit(commit);
@@ -124,14 +128,14 @@ export const CustomCommitTree = ({
                     currentBranch.name !== commit.branch &&
                     commit.action.toLowerCase() === "checkout"
                   ) {
-                    branches[commit.branch] = currentBranch;
+                    console.log("commit.branch", commit.branch)
                     currentBranch = currentBranch.branch(commit.branch);
+                    branches[currentBranch.name] = currentBranch;
                     currentBranch.commit(messageWithClick(commit));
                   } else if (
-                    currentBranch.name !== commit.branch &&
-                    commit.action.toLowerCase() === "update"
+                    commit.action.toLowerCase() === "cherry-pick"
                   ) {
-                    currentBranch = branches[commit.branch];
+                    currentBranch = gitgraph.branch("main");
                     currentBranch.commit(messageWithClick(commit));
                   }
                 });

@@ -49,7 +49,8 @@ export default function CommitInfoPage({
           onClick={async () => {
             try {
               setIsLoading(true);
-              await handleClick(0);
+              const metadata = selectedCommit.body.split(",");
+              await handleClick(metadata[2]);
               setIsLoading(false);
             } catch (e) {
               console.log(e);
@@ -67,22 +68,38 @@ export default function CommitInfoPage({
           onClick={async () => {
             try {
               setIsLoading(true);
-               const items = await getItems();
-               const response = await axios.post(
-                 "http://localhost:3000/api/commits",
-                 {
-                   items,
-                   message: currentCommit.messsage,
-                   branch: "master",
-                   boardId: currentCommit.boardId,
-                   previousCommitId: currentCommit.id,
-                   action: "checkout",
-                   content: items,
-                 }
-               );
-               // await addSticky();
-               setIsLoading(false);
-               setCurrentCommit(response.data);
+              const items = await getItems();
+              if (currentCommit?.body) {
+                console.log("currentCommit", currentCommit);
+                const [id, branch] = currentCommit.body.split(",");
+                const response = await axios.post(
+                  "http://localhost:3000/api/commits",
+                  {
+                    message: currentCommit?.subject ?? "",
+                    boardId: currentCommit?.boardId ?? "board1",
+                    branch: "main",
+                    previousCommitId: id,
+                    action: "cherry-pick",
+                    content: items,
+                  }
+                );
+                setCurrentCommit("Initial commit");
+                setIsLoading(false);
+                return;
+              }
+              const response = await axios.post(
+                "http://localhost:3000/api/commits",
+                {
+                  message: commitMessage,
+                  boardId: currentCommit?.boardId ?? "board1",
+                  branch: "main",
+                  previousCommitId: currentCommit?.id ?? "first commit",
+                  action: "checkout",
+                  content: items,
+                }
+              );
+              setCurrentCommit("Initial commit");
+              setIsLoading(false);
             } catch (e) {
               console.log(e);
               setIsLoading(false);

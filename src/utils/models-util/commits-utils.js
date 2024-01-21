@@ -24,8 +24,8 @@ export const getCommitById = async (id) => {
   return await Commit.findById(id);
 };
 
-export const getCommitByBranchId = async (id) => {
-  return await Commit.find({ branchId: id });
+export const getCommitByBranchId = async (name) => {
+  return await Commit.find({ branch: name }).sort({ date: -1 });
 };
 
 export const getCommitByBoardId = async (id) => {
