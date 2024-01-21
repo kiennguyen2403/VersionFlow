@@ -36,6 +36,10 @@ export const deleteCommit = async (id) => {
   return await Commit.deleteOne({ _id: id });
 };
 
+export const deleteCommitByBoardId = async (id) => {
+  return await Commit.deleteMany({ boardId: id });
+}
+
 export const updateCommit = async (id, data) => {
   const {} = data;
   const commit = await Commit.findById(id);

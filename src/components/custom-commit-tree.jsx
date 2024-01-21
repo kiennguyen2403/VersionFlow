@@ -23,11 +23,15 @@ export const CustomCommitTree = ({
       );
       const commits = response.data.commits;
       setCommits(commits);
+      console.log("commits", commits);
       const commitsInMainBranch = commits.filter(
         (commit) => commit.branch === "main"
       );
-      if (currentCommit === 'Initial commit' && commitsInMainBranch.length - 1) {
-        setCurrentCommit(commitsInMainBranch[commitsInMainBranch.length - 1])
+      if (
+        currentCommit === "Initial commit" &&
+        commitsInMainBranch.length - 1
+      ) {
+        setCurrentCommit(commitsInMainBranch[commitsInMainBranch.length - 1]);
       }
     } catch (error) {
       console.log(error);
@@ -37,6 +41,7 @@ export const CustomCommitTree = ({
   };
   useEffect(() => {
     fetchDatas();
+    console.log("currentCommit", currentCommit);;
   }, [currentCommit]);
 
   function messageWithClick(message) {
@@ -44,6 +49,7 @@ export const CustomCommitTree = ({
       subject: message,
       onClick(commit) {
         setSelectedCommit(commit);
+        setCurrentCommit(commit);
         setValue(0);
       },
     };
@@ -70,7 +76,7 @@ export const CustomCommitTree = ({
       ) : (
         <>
           {isRendered && commits.length > 0 && (
-            <Gitgraph options={{}}>
+            <Gitgraph options={{}} key={JSON.stringify(commits)}>
               {(gitgraph) => {
                 const branches = {};
                 let currentBranch = gitgraph.branch("main");

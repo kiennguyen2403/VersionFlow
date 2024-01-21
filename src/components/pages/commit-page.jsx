@@ -44,21 +44,14 @@ export const CommitPage = ({ setCurrentCommit, getItems, currentCommit }) => {
           onClick={async () => {
             try {
               setIsLoading(true);
-              const lastestCommit = await axios.get(
-                "http://localhost:3000/api/commits", {
-                  params: {
-                    branch: currentCommit.branch
-                  }
-                }
-              );
               const items = await getItems();
               const response = await axios.post(
                 "http://localhost:3000/api/commits",
                 {
                   message: commitMessage,
-                  boardId: currentCommit.boardId,
-                  branch: currentCommit.branch,
-                  previousCommitId: currentCommit.id,
+                  boardId: currentCommit?.boardId ?? "board1",
+                  branch: currentCommit?.branch ?? "main",
+                  previousCommitId: currentCommit?.id ?? "first commit",
                   action: "update",
                   content : items
                 }

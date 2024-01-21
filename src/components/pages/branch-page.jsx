@@ -45,16 +45,16 @@ export const BranchPage = ({ setCurrentCommit, getItems, currentCommit }) => {
         <LoadingButton
           onClick={async () => {
             try {
+              console.log("currentCommit", currentCommit);
               setIsLoading(true);
               const items = await getItems();
               const response = await axios.post(
                 "http://localhost:3000/api/commits",
                 {
-                  items,
-                  message: "create branch" + branch,
+                  message: "create branch " + branch,
                   branch: branch,
-                  boardId: currentCommit.boardId,
-                  previousCommitId: currentCommit.id,
+                  boardId: currentCommit?.boardId,
+                  previousCommitId: currentCommit?.id,
                   action: "checkout",
                   content: items,
                 }
