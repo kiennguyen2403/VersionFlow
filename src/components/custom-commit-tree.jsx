@@ -85,21 +85,20 @@ export const CustomCommitTree = ({
                     currentBranch.name === commit.branch &&
                     commit.action.toLowerCase() === "update"
                   ) {
-                    currentBranch = branches[commit.branch];
+                    // currentBranch = branches[commit.branch];
                     currentBranch.commit(messageWithClick(commit));
                     
                   } else if (
-                    currentBranch.name !== commit.branch &&
                     commit.action.toLowerCase() === "checkout"
                   ) {
-                    branches[commit.branch] = currentBranch;
+                    console.log("commit.branch", commit.branch)
                     currentBranch = currentBranch.branch(commit.branch);
+                    branches[currentBranch.name] = currentBranch;
                     currentBranch.commit(messageWithClick(commit));
                   } else if (
-                    currentBranch.name !== commit.branch &&
-                    commit.action.toLowerCase() === "update"
+                    commit.action.toLowerCase() === "cherry-pick"
                   ) {
-                    currentBranch = branches[commit.branch];
+                    currentBranch = gitgraph.branch("main");
                     currentBranch.commit(messageWithClick(commit));
                   }
                 });

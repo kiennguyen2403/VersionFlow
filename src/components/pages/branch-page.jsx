@@ -50,13 +50,11 @@ export const BranchPage = ({ setCurrentCommit, getItems, currentCommit }) => {
               const items = await getItems();
               if (currentCommit?.body) {
                 console.log("currentCommit", currentCommit);
-                const [id, branch] = currentCommit.body.split(",");
-                console.log("id", id);
-                console.log("branch", branch);
+                const [id, silly] = currentCommit.body.split(",");
                 const response = await axios.post(
                   "http://localhost:3000/api/commits",
                   {
-                    message: commitMessage,
+                    message: "create branch " + branch,
                     boardId: currentCommit?.boardId ?? "board1",
                     branch: branch,
                     previousCommitId: id,
