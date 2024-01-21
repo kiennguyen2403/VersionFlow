@@ -6,13 +6,15 @@ import {
   getCommitById,
   deleteCommit,
   updateCommit,
-  getCommitByBoardId
+  getCommitByBoardId,
+  getCommitByBranchId,
 } from "../../../utils/models-util/commits-utils";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.nextUrl);
   const id = searchParams.get("id") ?? "";
   const boardId = searchParams.get("boardId") ?? "";
+  const branchId = searchParams.get("branchId") ?? "";
   try {
     await mongoConnection();
     if (id) {
@@ -22,6 +24,11 @@ export async function GET(request) {
       });
     } else if (boardId) {
       const commits = await getCommitByBoardId(boardId);
+      return Response.json({
+        commits,
+      });
+    } else if (branchId) {
+      const commits = await getCommitByBranchId(branchId);
       return Response.json({
         commits,
       });
