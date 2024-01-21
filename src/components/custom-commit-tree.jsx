@@ -21,7 +21,14 @@ export const CustomCommitTree = ({
       const response = await axios.get(
         `http://localhost:3000/api/commits?boardId=${boardId}`
       );
-      setCommits(response.data.commits);
+      const commits = response.data.commits;
+      setCommits(commits);
+      const commitsInMainBranch = commits.filter(
+        (commit) => commit.branch === "main"
+      );
+      if (currentCommit === 'Initial commit' && commitsInMainBranch.length - 1) {
+        setCurrentCommit(commitsInMainBranch[commitsInMainBranch.length - 1])
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -30,7 +37,7 @@ export const CustomCommitTree = ({
   };
   useEffect(() => {
     fetchDatas();
-  }, []);
+  }, [currentCommit]);
   function messageWithClick(message) {
     const param = {
       subject: message,
@@ -76,7 +83,7 @@ export const CustomCommitTree = ({
                   ) {
                     currentBranch = currentBranch.branch(commit.branch);
                     currentBranch.commit(messageWithClick(commit.message));
-                  } 
+                  }
                   // else if (
                   //   currentBranch.name !== commit.branch &&
                   //   commit.action.toLowerCase() === "update"

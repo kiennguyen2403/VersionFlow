@@ -55,7 +55,6 @@ export const CommitPage = ({ setCurrentCommit, getItems, currentCommit }) => {
               const response = await axios.post(
                 "http://localhost:3000/api/commits",
                 {
-                  id: "asdn",
                   message: commitMessage,
                   boardId: currentCommit.boardId,
                   branch: currentCommit.branch,

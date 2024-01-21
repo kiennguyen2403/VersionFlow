@@ -4,6 +4,7 @@ import { Tabs, Tab, Typography, Box } from "@mui/material";
 import { CommitPage } from "./pages/commit-page";
 import { BranchPage } from "./pages/branch-page";
 import CommitInfoPage from "./pages/commit-info-page";
+import axios from "axios";
 
 const mockData = {
   size: 3,
