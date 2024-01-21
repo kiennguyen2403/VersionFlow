@@ -23,6 +23,12 @@ export const CustomCommitTree = ({
   options,
   setOptions,
 }) => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const [commits, setCommits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isRendered, setIsRendered] = useState(false);
@@ -32,13 +38,8 @@ export const CustomCommitTree = ({
       const response = await axios.get(`http://localhost:3000/api/commits?boardId=${boardId}`);
       const commits = response.data.commits;
       setCommits(commits);
-      const commitsInMainBranch = commits.filter(
-        (commit) => commit.branch === "main"
-      );
-      if (
-        currentCommit === "Initial commit" &&
-        commitsInMainBranch.length - 1
-      ) {
+      const commitsInMainBranch = commits.filter((commit) => commit.branch === "main");
+      if (currentCommit === "Initial commit" && commitsInMainBranch.length - 1) {
         setCurrentCommit(commitsInMainBranch[commitsInMainBranch.length - 1]);
       }
     } catch (error) {
@@ -54,7 +55,7 @@ export const CustomCommitTree = ({
   function messageWithClick(commit) {
     const param = {
       subject: commit.message,
-      body: commit.id +","+ commit.branch +","+commit._id,
+      body: commit.id + "," + commit.branch + "," + commit._id,
       onClick(commit) {
         setSelectedCommit(commit);
         setCurrentCommit(commit);
@@ -89,7 +90,7 @@ export const CustomCommitTree = ({
             height: "100%",
           }}
         >
-          <CircularProgress />
+          Loading...
         </div>
       ) : (
         <>
@@ -128,13 +129,11 @@ export const CustomCommitTree = ({
                     currentBranch.name !== commit.branch &&
                     commit.action.toLowerCase() === "checkout"
                   ) {
-                    console.log("commit.branch", commit.branch)
+                    console.log("commit.branch", commit.branch);
                     currentBranch = currentBranch.branch(commit.branch);
                     branches[currentBranch.name] = currentBranch;
                     currentBranch.commit(messageWithClick(commit));
-                  } else if (
-                    commit.action.toLowerCase() === "cherry-pick"
-                  ) {
+                  } else if (commit.action.toLowerCase() === "cherry-pick") {
                     currentBranch = gitgraph.branch("main");
                     currentBranch.commit(messageWithClick(commit));
                   }
