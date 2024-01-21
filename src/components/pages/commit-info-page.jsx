@@ -3,11 +3,15 @@ import { Button, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { LoadingButton } from "@mui/lab";
+import axios from "axios";
 
 export default function CommitInfoPage({
   selectedCommit,
   setSelectedCommit,
   handleClick,
+  getItems,
+  currentCommit,
+  setCurrentCommit,
 }) {
   // TODO: Update UI
   const [isLoading, setIsLoading] = useState(false);
@@ -33,14 +37,14 @@ export default function CommitInfoPage({
           </Typography>
         </>
       )}
-      <div style = {
-        {
+      <div
+        style={{
           display: "flex",
           flexDirection: "row",
           gap: "10px",
           width: "100%",
-        }
-      }>
+        }}
+      >
         <LoadingButton
           onClick={async () => {
             try {
@@ -57,14 +61,28 @@ export default function CommitInfoPage({
           size="small"
           fullWidth
         >
-          Set miro board to this commit
+          Sync mirro with this commit
         </LoadingButton>
         <LoadingButton
           onClick={async () => {
             try {
               setIsLoading(true);
-              await handleClick(0);
-              setIsLoading(false);
+               const items = await getItems();
+               const response = await axios.post(
+                 "http://localhost:3000/api/commits",
+                 {
+                   items,
+                   message: currentCommit.messsage,
+                   branch: "master",
+                   boardId: currentCommit.boardId,
+                   previousCommitId: currentCommit.id,
+                   action: "checkout",
+                   content: items,
+                 }
+               );
+               // await addSticky();
+               setIsLoading(false);
+               setCurrentCommit(response.data);
             } catch (e) {
               console.log(e);
               setIsLoading(false);

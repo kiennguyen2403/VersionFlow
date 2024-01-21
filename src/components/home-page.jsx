@@ -235,14 +235,6 @@ export const HomePage = ({
   async function attachItems(items) {
     try {
       for (const dataItem of items) {
-        // console.log(dataItem);
-        // console.log("Hello");
-        // const stickyNote = await miro.board.createStickyNote({
-        //   content: dataItem.data.content,
-        //   shape: dataItem.data.shape,
-        //   x: dataItem.position.x,
-        //   y: dataItem.position.y,
-        // });
         const itemType = dataItem.type;
         if (itemActions[itemType]) {
           await itemActions[itemType](dataItem);
@@ -312,12 +304,15 @@ export const HomePage = ({
             <CommitInfoPage
               selectedCommit={selectedCommit}
               setSelectedCommit={setSelectedCommit}
-              board_id={board_id}
               handleClick={handleClick}
+              getItems={getItems}
+              currentCommit={currentCommit}
+              setCurrentCommit={setCurrentCommit}
+
             />
           )}
-          {value === 1 && <CommitPage setCurrentCommit={setCurrentCommit} />}
-          {value === 2 && <BranchPage setCurrentCommit={setCurrentCommit} />}
+          {value === 1 && <CommitPage setCurrentCommit={setCurrentCommit} getItems={getItems} currentCommit={currentCommit}/>}
+          {value === 2 && <BranchPage setCurrentCommit={setCurrentCommit} getItems={getItems} currentCommit={currentCommit}/>}
         </Box>
       )}
     </div>

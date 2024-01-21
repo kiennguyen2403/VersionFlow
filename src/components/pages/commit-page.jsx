@@ -2,8 +2,9 @@ import React, { useState, useCallback } from "react";
 import { TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
+import axios from "axios";
 
-export const CommitPage = ({ setCurrentCommit }) => {
+export const CommitPage = ({ setCurrentCommit, getItems, currentCommit }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [commitMessage, setCommitMessage] = useState("");
 
@@ -43,6 +44,27 @@ export const CommitPage = ({ setCurrentCommit }) => {
           onClick={async () => {
             try {
               setIsLoading(true);
+              const lastestCommit = await axios.get(
+                "http://localhost:3000/api/commits", {
+                  params: {
+                    branch: currentCommit.branch
+                  }
+                }
+              );
+              const items = await getItems();
+              const response = await axios.post(
+                "http://localhost:3000/api/commits",
+                {
+                  id: "asdn",
+                  message: commitMessage,
+                  boardId: currentCommit.boardId,
+                  branch: currentCommit.branch,
+                  previousCommitId: currentCommit.id,
+                  action: "update",
+                  content : items
+                }
+              );
+              setCurrentCommit(response.data);
               setIsLoading(false);
               // setCurrentCommit(commitMessage);
             } catch (e) {
