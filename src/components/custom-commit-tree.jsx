@@ -41,12 +41,12 @@ export const CustomCommitTree = ({
   };
   useEffect(() => {
     fetchDatas();
-    console.log("currentCommit", currentCommit);;
   }, [currentCommit]);
 
-  function messageWithClick(message) {
+  function messageWithClick(commit) {
     const param = {
-      subject: message,
+      subject: commit.message,
+      body: commit.id +","+ commit.branch,
       onClick(commit) {
         setSelectedCommit(commit);
         setCurrentCommit(commit);
@@ -86,21 +86,22 @@ export const CustomCommitTree = ({
                     currentBranch.name === commit.branch &&
                     commit.action.toLowerCase() === "update"
                   ) {
-                    console.log(commit.action);
-                    currentBranch.commit(messageWithClick(commit.message));
+                    currentBranch = branches[commit.branch];
+                    currentBranch.commit(messageWithClick(commit));
+                    
                   } else if (
                     currentBranch.name !== commit.branch &&
                     commit.action.toLowerCase() === "checkout"
                   ) {
                     branches[commit.branch] = currentBranch;
                     currentBranch = currentBranch.branch(commit.branch);
-                    currentBranch.commit(messageWithClick(commit.message));
+                    currentBranch.commit(messageWithClick(commit));
                   } else if (
                     currentBranch.name !== commit.branch &&
                     commit.action.toLowerCase() === "update"
                   ) {
                     currentBranch = branches[commit.branch];
-                    currentBranch.commit(messageWithClick(commit.message));
+                    currentBranch.commit(messageWithClick(commit));
                   }
                 });
               }}

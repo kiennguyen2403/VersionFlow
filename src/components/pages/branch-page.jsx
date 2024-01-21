@@ -48,6 +48,26 @@ export const BranchPage = ({ setCurrentCommit, getItems, currentCommit }) => {
               console.log("currentCommit", currentCommit);
               setIsLoading(true);
               const items = await getItems();
+              if (currentCommit?.body) {
+                console.log("currentCommit", currentCommit);
+                const [id, branch] = currentCommit.body.split(",");
+                console.log("id", id);
+                console.log("branch", branch);
+                const response = await axios.post(
+                  "http://localhost:3000/api/commits",
+                  {
+                    message: commitMessage,
+                    boardId: currentCommit?.boardId ?? "board1",
+                    branch: branch,
+                    previousCommitId: id,
+                    action: "checkout",
+                    content: items,
+                  }
+                );
+                setCurrentCommit("Initial commit");
+                setIsLoading(false);
+                return;
+              }
               const response = await axios.post(
                 "http://localhost:3000/api/commits",
                 {
@@ -61,7 +81,7 @@ export const BranchPage = ({ setCurrentCommit, getItems, currentCommit }) => {
               );
               // await addSticky();
               setIsLoading(false);
-              setCurrentCommit(response.data);
+              setCurrentCommit("Initial commit");
             } catch (e) {
               console.log(e);
               setIsLoading(false);
