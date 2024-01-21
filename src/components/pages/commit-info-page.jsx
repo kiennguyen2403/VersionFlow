@@ -33,7 +33,14 @@ export default function CommitInfoPage({
           </Typography>
         </>
       )}
-      <div>
+      <div style = {
+        {
+          display: "flex",
+          flexDirection: "row",
+          gap: "10px",
+          width: "100%",
+        }
+      }>
         <LoadingButton
           onClick={async () => {
             try {
@@ -51,6 +58,24 @@ export default function CommitInfoPage({
           fullWidth
         >
           Set miro board to this commit
+        </LoadingButton>
+        <LoadingButton
+          onClick={async () => {
+            try {
+              setIsLoading(true);
+              await handleClick(0);
+              setIsLoading(false);
+            } catch (e) {
+              console.log(e);
+              setIsLoading(false);
+            }
+          }}
+          isLoading={isLoading}
+          variant="contained"
+          size="small"
+          fullWidth
+        >
+          Use this commit as the latest version
         </LoadingButton>
       </div>
     </>
