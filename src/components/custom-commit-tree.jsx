@@ -23,7 +23,6 @@ export const CustomCommitTree = ({
       );
       const commits = response.data.commits;
       setCommits(commits);
-      console.log("commits", commits);
       const commitsInMainBranch = commits.filter(
         (commit) => commit.branch === "main"
       );
@@ -46,7 +45,7 @@ export const CustomCommitTree = ({
   function messageWithClick(commit) {
     const param = {
       subject: commit.message,
-      body: commit.id +","+ commit.branch,
+      body: commit.id +","+ commit.branch +","+commit._id,
       onClick(commit) {
         setSelectedCommit(commit);
         setCurrentCommit(commit);

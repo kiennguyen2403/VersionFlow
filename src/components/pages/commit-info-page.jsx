@@ -49,7 +49,8 @@ export default function CommitInfoPage({
           onClick={async () => {
             try {
               setIsLoading(true);
-              await handleClick(0);
+              const metadata = selectedCommit.body.split(',');
+              await handleClick(metadata[2]);
               setIsLoading(false);
             } catch (e) {
               console.log(e);
@@ -71,7 +72,6 @@ export default function CommitInfoPage({
                const response = await axios.post(
                  "http://localhost:3000/api/commits",
                  {
-                   items,
                    message: currentCommit.messsage,
                    branch: "master",
                    boardId: currentCommit.boardId,

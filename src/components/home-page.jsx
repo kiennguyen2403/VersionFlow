@@ -6,134 +6,6 @@ import { BranchPage } from "./pages/branch-page";
 import CommitInfoPage from "./pages/commit-info-page";
 import axios from "axios";
 
-const mockData = {
-  size: 3,
-  limit: 10,
-  total: 3,
-  data: [
-    {
-      id: "3458764576264207799",
-      type: "sticky_note",
-      data: {
-        content: "Hello",
-        shape: "square",
-      },
-      style: {
-        fillColor: "light_yellow",
-        textAlign: "center",
-        textAlignVertical: "middle",
-      },
-      geometry: {
-        width: 199,
-        height: 228,
-      },
-      position: {
-        x: 100,
-        y: 100,
-        origin: "center",
-        relativeTo: "canvas_center",
-      },
-      links: {
-        self: "http://api.miro.com/v2/boards/uXjVN3sX014%3D/sticky_notes/3458764576264207799",
-      },
-      createdAt: "2024-01-20T16:12:43Z",
-      createdBy: {
-        id: "3458764525332151006",
-        type: "user",
-      },
-      modifiedAt: "2024-01-20T16:12:43Z",
-      modifiedBy: {
-        id: "3458764525332151006",
-        type: "user",
-      },
-    },
-    {
-      id: "3458764576264265015",
-      type: "sticky_note",
-      data: {
-        content: "<p>Hello</p>",
-        shape: "square",
-      },
-      style: {
-        fillColor: "light_yellow",
-        textAlign: "center",
-        textAlignVertical: "middle",
-      },
-      geometry: {
-        width: 811.0768708449248,
-        height: 929.2740027770997,
-      },
-      position: {
-        x: -6593.607211917101,
-        y: -3743.91324972707,
-        origin: "center",
-        relativeTo: "canvas_center",
-      },
-      links: {
-        self: "http://api.miro.com/v2/boards/uXjVN3sX014%3D/sticky_notes/3458764576264265015",
-      },
-      createdAt: "2024-01-20T16:12:58Z",
-      createdBy: {
-        id: "3458764525332151006",
-        type: "user",
-      },
-      modifiedAt: "2024-01-20T16:13:03Z",
-      modifiedBy: {
-        id: "3458764525332151006",
-        type: "user",
-      },
-    },
-    {
-      id: "3458764576264265110",
-      type: "shape",
-      data: {
-        content: "<p>asdas</p>",
-        shape: "rectangle",
-      },
-      style: {
-        fillColor: "#ffffff",
-        fillOpacity: "0.0",
-        fontFamily: "open_sans",
-        fontSize: "311",
-        borderColor: "#1a1a1a",
-        borderWidth: "2.0",
-        borderOpacity: "1.0",
-        borderStyle: "normal",
-        textAlign: "center",
-        textAlignVertical: "middle",
-        color: "#1a1a1a",
-      },
-      geometry: {
-        width: 684.8319441595612,
-        height: 466.1143654913072,
-      },
-      position: {
-        x: -8760.661928412217,
-        y: -3560.856066981416,
-        origin: "center",
-        relativeTo: "canvas_center",
-      },
-      links: {
-        self: "http://api.miro.com/v2/boards/uXjVN3sX014%3D/shapes/3458764576264265110",
-      },
-      createdAt: "2024-01-20T16:13:09Z",
-      createdBy: {
-        id: "3458764525332151006",
-        type: "user",
-      },
-      modifiedAt: "2024-01-20T16:13:17Z",
-      modifiedBy: {
-        id: "3458764525332151006",
-        type: "user",
-      },
-    },
-  ],
-  links: {
-    self: "http://api.miro.com/v2/boards/uXjVN3sX014%3D/items?limit=10&cursor=",
-  },
-  type: "cursor-list",
-};
-
 const itemActions = {
   card: (item) => {
     // Perform actions for 'card' type
@@ -148,14 +20,14 @@ const itemActions = {
           color: item.style.color || "#ff0000", // Default text color: '#1a1a1a' (black)
           fillColor: item.style.fillColor || "#ffff00", // Default shape fill color: transparent (no fill)
           fontFamily: item.style.fontFamily || "arial", // Default font type for the text
-          fontSize: item.style.fontSize || 14, // Default font size for the text, in dp
+          fontSize: parseInt(item.style.fontSize) || 14, // Default font size for the text, in dp
           textAlign: item.style.textAlign || "center", // Default horizontal alignment for the text
           textAlignVertical: item.style.textAlignVertical || "middle", // Default vertical alignment for the text
           borderStyle: item.style.borderStyle || "normal", // Default border line style
-          borderOpacity: item.style.borderOpacity || 1.0, // Default border color opacity: no opacity
+          borderOpacity: parseFloat(item.style.borderOpacity) || 1.0, // Default border color opacity: no opacity
           borderColor: item.style.borderColor || "#ff7400", // Default border color: '#ffffff` (white)
-          borderWidth: item.style.borderWidth || 2, // Default border width
-          fillOpacity: item.style.fillOpacity || 1.0, // Default fill color opacity: no opacity
+          borderWidth: parseFloat(item.style.borderWidth || 2), // Default border width
+          fillOpacity: parseFloat(item.style.fillOpacity || 1.0), // Default fill color opacity: no opacity
         },
         x: item.position.x || 0, // Default value: center of the board
         y: item.position.y || 0, // Default value: center of the board
@@ -214,11 +86,16 @@ export const HomePage = ({
     setValue(newValue);
   };
 
-  const handleClick = async (id) => {
-    // const items = await getItems(id);
-    // setValue(newValue);
-    await deleteAllItems();
-    await attachItems(mockData.data);
+  const handleClick = async (commitId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/commits?id=${commitId}`);
+      const data = response.data.commit.content || [];
+      await deleteAllItems();
+      await attachItems(data[0].data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const deleteAllItems = async () => {
@@ -305,7 +182,7 @@ export const HomePage = ({
             <CommitInfoPage
               selectedCommit={selectedCommit}
               setSelectedCommit={setSelectedCommit}
-              handleClick={handleClick}
+              handleClick={(commitId) => handleClick(commitId)}
               getItems={getItems}
               currentCommit={currentCommit}
               setCurrentCommit={setCurrentCommit}
