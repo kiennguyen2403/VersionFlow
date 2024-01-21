@@ -62,7 +62,7 @@ export const CustomCommitTree = ({
       ) : (
         <>
           {isRendered && commits.length > 0 && (
-            <Gitgraph options={{}}>
+            <Gitgraph options={graphOptions}>
               {(gitgraph) => {
                 let currentBranch = gitgraph.branch("main");
                 commits.forEach((commit) => {
@@ -76,30 +76,21 @@ export const CustomCommitTree = ({
                   ) {
                     currentBranch = currentBranch.branch(commit.branch);
                     currentBranch.commit(messageWithClick(commit.message));
-                  } 
-                  // else if (
-                  //   currentBranch.name !== commit.branch &&
-                  //   commit.action.toLowerCase() === "update"
-                  // ) {
-                  //   currentBranch.branch(commit.branch).commit({
-                  //     subject: commit.message,
-                  //     onclick: () => {},
-                  //     onmouseover: () => {},
-                  //     onmouseout: () => {},
-                  //   });
-                  // }
+                  } else if (
+                    currentBranch.name !== commit.branch &&
+                    commit.action.toLowerCase() === "update"
+                  ) {
+                    currentBranch.branch(commit.branch).commit({
+                      subject: commit.message,
+                      onclick: () => {},
+                      onmouseover: () => {},
+                      onmouseout: () => {},
+                    });
+                  }
                 });
               }}
             </Gitgraph>
           )}
-          x
-          <SampleCommitTree
-            currentCommit={currentCommit}
-            setCurrentCommit={setCurrentCommit}
-            selectedCommit={selectedCommit}
-            setSelectedCommit={setSelectedCommit}
-            setValue={setValue}
-          />
         </>
       )}
     </div>
