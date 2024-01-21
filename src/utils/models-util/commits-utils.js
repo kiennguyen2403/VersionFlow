@@ -24,6 +24,10 @@ export const getCommitById = async (id) => {
   return await Commit.findById(id);
 };
 
+export const getCommitById_2 = async (id) => {
+  return await Commit.find({ id: id });
+};
+
 export const getCommitByBranchId = async (id) => {
   return await Commit.find({ branchId: id });
 };
@@ -38,7 +42,7 @@ export const deleteCommit = async (id) => {
 
 export const deleteCommitByBoardId = async (id) => {
   return await Commit.deleteMany({ boardId: id });
-}
+};
 
 export const updateCommit = async (id, data) => {
   const {} = data;

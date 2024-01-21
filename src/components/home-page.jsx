@@ -309,11 +309,23 @@ export const HomePage = ({
               getItems={getItems}
               currentCommit={currentCommit}
               setCurrentCommit={setCurrentCommit}
-
             />
           )}
-          {value === 1 && <CommitPage setCurrentCommit={setCurrentCommit} getItems={getItems} currentCommit={currentCommit}/>}
-          {value === 2 && <BranchPage setCurrentCommit={setCurrentCommit} getItems={getItems} currentCommit={currentCommit}/>}
+          {value === 1 && (
+            <CommitPage
+              setCurrentCommit={setCurrentCommit}
+              getItems={getItems}
+              currentCommit={currentCommit}
+            />
+          )}
+          {value === 2 && (
+            <BranchPage
+              setCurrentCommit={setCurrentCommit}
+              getItems={getItems}
+              currentCommit={currentCommit}
+              selectedCommit={selectedCommit}
+            />
+          )}
         </Box>
       )}
     </div>

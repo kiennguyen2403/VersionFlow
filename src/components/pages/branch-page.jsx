@@ -5,7 +5,12 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import UploadIcon from "@mui/icons-material/Upload";
 import axios from "axios";
 
-export const BranchPage = ({ setCurrentCommit, getItems, currentCommit }) => {
+export const BranchPage = ({
+  setCurrentCommit,
+  getItems,
+  currentCommit,
+  selectedCommit,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [branch, setBranch] = useState("");
 
@@ -48,22 +53,23 @@ export const BranchPage = ({ setCurrentCommit, getItems, currentCommit }) => {
               console.log("currentCommit", currentCommit);
               setIsLoading(true);
               const items = await getItems();
-              if (currentCommit?.body) {
-                console.log("currentCommit", currentCommit);
-                const [id, branch] = currentCommit.body.split(",");
+              if (selectedCommit?.body) {
+                console.log("selectedCommit", selectedCommit);
+                const [id, branchh] = selectedCommit.body.split(",");
                 console.log("id", id);
-                console.log("branch", branch);
+                console.log("branch", branchh);
                 const response = await axios.post(
                   "http://localhost:3000/api/commits",
                   {
-                    message: commitMessage,
-                    boardId: currentCommit?.boardId ?? "board1",
+                    message: "lol",
+                    boardId: selectedCommit?.boardId ?? "board1",
                     branch: branch,
                     previousCommitId: id,
                     action: "checkout",
                     content: items,
                   }
                 );
+
                 setCurrentCommit("Initial commit");
                 setIsLoading(false);
                 return;

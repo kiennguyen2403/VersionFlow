@@ -23,7 +23,7 @@ export const CustomCommitTree = ({
       );
       const commits = response.data.commits;
       setCommits(commits);
-      console.log("commits", commits);
+      // console.log("commits", commits);
       const commitsInMainBranch = commits.filter(
         (commit) => commit.branch === "main"
       );
@@ -39,17 +39,34 @@ export const CustomCommitTree = ({
       setLoading(false); // Set loading to false when fetching is done
     }
   };
+
+  const fetchCommit = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/commits?_id=72ba1154-6c1f-439b-98ff-7f960bb33f73`
+      );
+      const res = response.data;
+      console.log(res);
+    } catch {
+    } finally {
+    }
+  };
   useEffect(() => {
     fetchDatas();
   }, [currentCommit]);
+  useEffect(() => {
+    fetchCommit();
+  }, []);
 
   function messageWithClick(commit) {
     const param = {
       subject: commit.message,
-      body: commit.id +","+ commit.branch,
+      body: commit.id + "," + commit.branch,
       onClick(commit) {
         setSelectedCommit(commit);
+        console.log(selectedCommit);
         setCurrentCommit(commit);
+        console.log(currentCommit);
         setValue(0);
       },
     };
@@ -76,44 +93,53 @@ export const CustomCommitTree = ({
       ) : (
         <>
           {isRendered && commits.length > 0 && (
-            <Gitgraph options={{}} key={JSON.stringify(commits)}>
+            <Gitgraph options={graphOptions} key={JSON.stringify(commits)}>
               {(gitgraph) => {
                 const branches = {};
                 let currentBranch = gitgraph.branch("main");
                 branches[currentBranch.name] = currentBranch;
-                commits.forEach((commit) => {
-                  if (
-                    currentBranch.name === commit.branch &&
-                    commit.action.toLowerCase() === "update"
-                  ) {
-                    currentBranch = branches[commit.branch];
-                    currentBranch.commit(messageWithClick(commit));
-                    
-                  } else if (
-                    currentBranch.name !== commit.branch &&
-                    commit.action.toLowerCase() === "checkout"
-                  ) {
-                    branches[commit.branch] = currentBranch;
-                    currentBranch = currentBranch.branch(commit.branch);
-                    currentBranch.commit(messageWithClick(commit));
-                  } else if (
-                    currentBranch.name !== commit.branch &&
-                    commit.action.toLowerCase() === "update"
-                  ) {
-                    currentBranch = branches[commit.branch];
-                    currentBranch.commit(messageWithClick(commit));
+
+                const processCommits = async () => {
+                  for (const commit of commits) {
+                    if (
+                      currentBranch.name === commit.branch &&
+                      commit.action.toLowerCase() === "update"
+                    ) {
+                      currentBranch.commit(messageWithClick(commit));
+                    } else if (
+                      currentBranch.name !== commit.branch &&
+                      commit.action.toLowerCase() === "checkout"
+                    ) {
+                      try {
+                        const response = await axios.get(
+                          `http://localhost:3000/api/commits?_id=${commit.previousCommitId}`
+                        );
+                        const previousCommitBranch =
+                          response.data.commit[0].branch;
+
+                        if (previousCommitBranch === commit.branch) {
+                          branches[commit.branch] = currentBranch;
+                          currentBranch = currentBranch.branch(commit.branch);
+                          currentBranch.commit(messageWithClick(commit));
+                        } else {
+                          currentBranch =
+                            currentBranch.branch(previousCommitBranch);
+                          currentBranch = currentBranch.branch(commit.branch);
+
+                          currentBranch.commit(messageWithClick(commit));
+                        }
+                      } catch (error) {
+                        console.error(error);
+                      }
+                    }
                   }
-                });
+                };
+
+                processCommits();
+                return <div>Your Gitgraph component...</div>;
               }}
             </Gitgraph>
           )}
-          {/* <SampleCommitTree
-            currentCommit={currentCommit}
-            setCurrentCommit={setCurrentCommit}
-            selectedCommit={selectedCommit}
-            setSelectedCommit={setSelectedCommit}
-            setValue={setValue}
-          /> */}
         </>
       )}
     </div>

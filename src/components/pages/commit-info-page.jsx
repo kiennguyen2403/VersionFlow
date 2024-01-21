@@ -23,7 +23,7 @@ export default function CommitInfoPage({
             Commit message: {selectedCommit?.subject ?? ""}
           </Typography>
           <Typography variant="body1" gutterBottom>
-            Author: {selectedCommit?.author.name ?? ""}
+            Branch: {selectedCommit?.branches[0] ?? ""}
           </Typography>
           <Typography variant="body1" gutterBottom>
             Date:{" "}
@@ -67,22 +67,22 @@ export default function CommitInfoPage({
           onClick={async () => {
             try {
               setIsLoading(true);
-               const items = await getItems();
-               const response = await axios.post(
-                 "http://localhost:3000/api/commits",
-                 {
-                   items,
-                   message: currentCommit.messsage,
-                   branch: "master",
-                   boardId: currentCommit.boardId,
-                   previousCommitId: currentCommit.id,
-                   action: "checkout",
-                   content: items,
-                 }
-               );
-               // await addSticky();
-               setIsLoading(false);
-               setCurrentCommit(response.data);
+              const items = await getItems();
+              const response = await axios.post(
+                "http://localhost:3000/api/commits",
+                {
+                  items,
+                  message: currentCommit.messsage,
+                  branch: "master",
+                  boardId: currentCommit.boardId,
+                  previousCommitId: currentCommit.id,
+                  action: "checkout",
+                  content: items,
+                }
+              );
+              // await addSticky();
+              setIsLoading(false);
+              setCurrentCommit(response.data);
             } catch (e) {
               console.log(e);
               setIsLoading(false);
