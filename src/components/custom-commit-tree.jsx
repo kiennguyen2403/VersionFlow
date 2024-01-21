@@ -2,8 +2,17 @@
 import React, { useState, useEffect } from "react";
 import { Gitgraph } from "@gitgraph/react";
 import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
 import { graphOptions } from "./graph-options";
 import { SampleCommitTree } from "./sample-commit-tree";
+
+const currentCommmitNodeStyle = {
+  dot: { color: "#4caf50" },
+};
+
+const selectedCommitNodeStyle = {
+  dot: { strokeWidth: 2, strokeColor: "#000" },
+};
 
 export const CustomCommitTree = ({
   currentCommit,
@@ -11,6 +20,8 @@ export const CustomCommitTree = ({
   selectedCommit,
   setSelectedCommit,
   setValue,
+  options,
+  setOptions,
 }) => {
   const [commits, setCommits] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,9 +29,7 @@ export const CustomCommitTree = ({
   const boardId = "board1";
   const fetchDatas = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/api/commits?boardId=${boardId}`
-      );
+      const response = await axios.get(`http://localhost:3000/api/commits?boardId=${boardId}`);
       const commits = response.data.commits;
       setCommits(commits);
       const commitsInMainBranch = commits.filter(
@@ -50,6 +59,7 @@ export const CustomCommitTree = ({
         setSelectedCommit(commit);
         setCurrentCommit(commit);
         setValue(0);
+        console.log(commit);
       },
     };
     return param;
@@ -71,24 +81,51 @@ export const CustomCommitTree = ({
       }}
     >
       {loading ? (
-        <p>Loading...</p>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <CircularProgress />
+        </div>
       ) : (
         <>
           {isRendered && commits.length > 0 && (
-            <Gitgraph options={{}} key={JSON.stringify(commits)}>
+            <Gitgraph options={options} key={JSON.stringify(commits)}>
               {(gitgraph) => {
                 const branches = {};
                 let currentBranch = gitgraph.branch("main");
                 branches[currentBranch.name] = currentBranch;
+                console.log(currentCommit.id);
                 commits.forEach((commit) => {
                   if (
                     currentBranch.name === commit.branch &&
                     commit.action.toLowerCase() === "update"
                   ) {
-                    // currentBranch = branches[commit.branch];
-                    currentBranch.commit(messageWithClick(commit));
-                    
-                  } else if (
+                    currentBranch = branches[commit.branch];
+                    currentBranch.commit({
+                      ...messageWithClick(commit),
+                      // Add color to current commit and selected commit
+                      style: currentCommit.id == commit.id && currentCommmitNodeStyle,
+                    });
+                  }
+                  /// TEST
+                  else if (
+                    currentBranch.name === commit.branch &&
+                    commit.action.toLowerCase() === "checkout"
+                  ) {
+                    currentBranch.commit({
+                      ...messageWithClick(commit),
+                      // Add color to current commit and selected commit
+                      style: currentCommit.id == commit.id && currentCommmitNodeStyle,
+                    });
+                  }
+                  ////
+                  else if (
+                    currentBranch.name !== commit.branch &&
                     commit.action.toLowerCase() === "checkout"
                   ) {
                     console.log("commit.branch", commit.branch)
@@ -105,13 +142,15 @@ export const CustomCommitTree = ({
               }}
             </Gitgraph>
           )}
-          {/* <SampleCommitTree
-            currentCommit={currentCommit}
-            setCurrentCommit={setCurrentCommit}
-            selectedCommit={selectedCommit}
-            setSelectedCommit={setSelectedCommit}
-            setValue={setValue}
-          /> */}
+          <div
+            style={{
+              position: "sticky",
+              bottom: 0,
+              display: "flex",
+              justifyContent: "end",
+              paddingRight: "10px",
+            }}
+          ></div>
         </>
       )}
     </div>
