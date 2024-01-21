@@ -21,6 +21,7 @@ export const graphOptions = {
             },
             spacing: 30,
         },
+        
     }),
     mode: "compact",
 };
