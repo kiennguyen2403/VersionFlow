@@ -3,11 +3,15 @@ import { Button, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { LoadingButton } from "@mui/lab";
+import axios from "axios";
 
 export default function CommitInfoPage({
   selectedCommit,
   setSelectedCommit,
   handleClick,
+  getItems,
+  currentCommit,
+  setCurrentCommit,
 }) {
   // TODO: Update UI
   const [isLoading, setIsLoading] = useState(false);
@@ -33,19 +37,20 @@ export default function CommitInfoPage({
           </Typography>
         </>
       )}
-      <div style = {
-        {
+      <div
+        style={{
           display: "flex",
           flexDirection: "row",
           gap: "10px",
           width: "100%",
-        }
-      }>
+        }}
+      >
         <LoadingButton
           onClick={async () => {
             try {
               setIsLoading(true);
-              await handleClick(0);
+              const metadata = selectedCommit.body.split(",");
+              await handleClick(metadata[2]);
               setIsLoading(false);
             } catch (e) {
               console.log(e);
@@ -57,13 +62,43 @@ export default function CommitInfoPage({
           size="small"
           fullWidth
         >
-          Set miro board to this commit
+          Sync mirro with this commit
         </LoadingButton>
         <LoadingButton
           onClick={async () => {
             try {
               setIsLoading(true);
-              await handleClick(0);
+              const items = await getItems();
+              if (currentCommit?.body) {
+                console.log("currentCommit", currentCommit);
+                const [id, branch] = currentCommit.body.split(",");
+                const response = await axios.post(
+                  "http://localhost:3000/api/commits",
+                  {
+                    message: currentCommit?.subject ?? "",
+                    boardId: currentCommit?.boardId ?? "board1",
+                    branch: "main",
+                    previousCommitId: id,
+                    action: "cherry-pick",
+                    content: items,
+                  }
+                );
+                setCurrentCommit("Initial commit");
+                setIsLoading(false);
+                return;
+              }
+              const response = await axios.post(
+                "http://localhost:3000/api/commits",
+                {
+                  message: commitMessage,
+                  boardId: currentCommit?.boardId ?? "board1",
+                  branch: "main",
+                  previousCommitId: currentCommit?.id ?? "first commit",
+                  action: "checkout",
+                  content: items,
+                }
+              );
+              setCurrentCommit("Initial commit");
               setIsLoading(false);
             } catch (e) {
               console.log(e);

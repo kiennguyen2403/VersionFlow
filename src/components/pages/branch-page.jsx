@@ -3,8 +3,9 @@ import React, { useState, useEffect } from "react";
 import { TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import UploadIcon from "@mui/icons-material/Upload";
+import axios from "axios";
 
-export const BranchPage = ({ setCurrentCommit }) => {
+export const BranchPage = ({ setCurrentCommit, getItems, currentCommit }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [branch, setBranch] = useState("");
 
@@ -44,10 +45,41 @@ export const BranchPage = ({ setCurrentCommit }) => {
         <LoadingButton
           onClick={async () => {
             try {
+              console.log("currentCommit", currentCommit);
               setIsLoading(true);
+              const items = await getItems();
+              if (currentCommit?.body) {
+                console.log("currentCommit", currentCommit);
+                const [id, silly] = currentCommit.body.split(",");
+                const response = await axios.post(
+                  "http://localhost:3000/api/commits",
+                  {
+                    message: "create branch " + branch,
+                    boardId: currentCommit?.boardId ?? "board1",
+                    branch: branch,
+                    previousCommitId: id,
+                    action: "checkout",
+                    content: items,
+                  }
+                );
+                setCurrentCommit("Initial commit");
+                setIsLoading(false);
+                return;
+              }
+              const response = await axios.post(
+                "http://localhost:3000/api/commits",
+                {
+                  message: "create branch " + branch,
+                  branch: branch,
+                  boardId: currentCommit?.boardId,
+                  previousCommitId: currentCommit?.id,
+                  action: "checkout",
+                  content: items,
+                }
+              );
               // await addSticky();
               setIsLoading(false);
-              // setCurrentCommit(id)
+              setCurrentCommit("Initial commit");
             } catch (e) {
               console.log(e);
               setIsLoading(false);

@@ -2,8 +2,9 @@ import React, { useState, useCallback } from "react";
 import { TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
+import axios from "axios";
 
-export const CommitPage = ({ setCurrentCommit }) => {
+export const CommitPage = ({ setCurrentCommit, getItems, currentCommit }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [commitMessage, setCommitMessage] = useState("");
 
@@ -43,6 +44,39 @@ export const CommitPage = ({ setCurrentCommit }) => {
           onClick={async () => {
             try {
               setIsLoading(true);
+              const items = await getItems();
+              if (currentCommit?.body) {
+                console.log("currentCommit", currentCommit);
+                const [id, branch] = currentCommit.body.split(",");
+                console.log("id", id);
+                console.log("branch", branch);
+                const response = await axios.post(
+                  "http://localhost:3000/api/commits",
+                  {
+                    message: commitMessage,
+                    boardId: currentCommit?.boardId ?? "board1",
+                    branch: branch,
+                    previousCommitId: id,
+                    action: "checkout",
+                    content: items,
+                  }
+                );
+                setCurrentCommit("Initial commit");
+                setIsLoading(false);
+                return;
+              }
+              const response = await axios.post(
+                "http://localhost:3000/api/commits",
+                {
+                  message: commitMessage,
+                  boardId: currentCommit?.boardId ?? "board1",
+                  branch: currentCommit?.branch ?? "main",
+                  previousCommitId: currentCommit?.id ?? "first commit",
+                  action: "update",
+                  content : items
+                }
+              );
+              setCurrentCommit("Initial commit");
               setIsLoading(false);
               // setCurrentCommit(commitMessage);
             } catch (e) {

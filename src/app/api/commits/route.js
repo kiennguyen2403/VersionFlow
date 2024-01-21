@@ -7,7 +7,7 @@ import {
   deleteCommit,
   updateCommit,
   getCommitByBoardId,
-  getCommitByBranchId,
+  deleteCommitByBoardId
 } from "../../../utils/models-util/commits-utils";
 
 export async function GET(request) {
@@ -95,6 +95,14 @@ export async function DELETE(request) {
   try {
     const { searchParams } = new URL(request.nextUrl);
     const id = searchParams.get("id");
+    const boardId = searchParams.get("boardId");
+    if (boardId) {
+      await mongoConnection();
+      await deleteCommitByBoardId(boardId);
+      return Response.json({
+        message: "Commit deleted",
+      });
+    }
     await mongoConnection();
     await deleteCommit(id);
     return Response.json({

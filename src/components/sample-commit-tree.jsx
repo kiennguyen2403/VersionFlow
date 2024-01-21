@@ -113,7 +113,7 @@ export function SampleCommitTree({
         const param = {
             subject: message,
             onClick(commit) {
-                setSelectedCommit(commit);
+                // setSelectedCommit(commit);
                 setValue(0);
             },
         };
