@@ -38,6 +38,7 @@ export const CustomCommitTree = ({
   useEffect(() => {
     fetchDatas();
   }, [currentCommit]);
+
   function messageWithClick(message) {
     const param = {
       subject: message,
@@ -71,42 +72,41 @@ export const CustomCommitTree = ({
           {isRendered && commits.length > 0 && (
             <Gitgraph options={{}}>
               {(gitgraph) => {
+                const branches = {};
                 let currentBranch = gitgraph.branch("main");
+                branches[currentBranch.name] = currentBranch;
                 commits.forEach((commit) => {
-                  console.log(commit);
-                  if (currentBranch.name === commit.branch) {
-                    console.log("matched branch");
+                  if (
+                    currentBranch.name === commit.branch &&
+                    commit.action.toLowerCase() === "update"
+                  ) {
+                    console.log(commit.action);
                     currentBranch.commit(messageWithClick(commit.message));
                   } else if (
                     currentBranch.name !== commit.branch &&
                     commit.action.toLowerCase() === "checkout"
                   ) {
+                    branches[commit.branch] = currentBranch;
                     currentBranch = currentBranch.branch(commit.branch);
                     currentBranch.commit(messageWithClick(commit.message));
+                  } else if (
+                    currentBranch.name !== commit.branch &&
+                    commit.action.toLowerCase() === "update"
+                  ) {
+                    currentBranch = branches[commit.branch];
+                    currentBranch.commit(messageWithClick(commit.message));
                   }
-                  // else if (
-                  //   currentBranch.name !== commit.branch &&
-                  //   commit.action.toLowerCase() === "update"
-                  // ) {
-                  //   currentBranch.branch(commit.branch).commit({
-                  //     subject: commit.message,
-                  //     onclick: () => {},
-                  //     onmouseover: () => {},
-                  //     onmouseout: () => {},
-                  //   });
-                  // }
                 });
               }}
             </Gitgraph>
           )}
-          x
-          <SampleCommitTree
+          {/* <SampleCommitTree
             currentCommit={currentCommit}
             setCurrentCommit={setCurrentCommit}
             selectedCommit={selectedCommit}
             setSelectedCommit={setSelectedCommit}
             setValue={setValue}
-          />
+          /> */}
         </>
       )}
     </div>
