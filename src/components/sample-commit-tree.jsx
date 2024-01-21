@@ -127,7 +127,7 @@ export function SampleCommitTree({
                 const master = gitgraph.branch("master");
                 master.commit({
                     ...messageWithClick("Initial commit"),
-                    style: { dot: { color: "red" } }, // TODO: Check with current commit
+                    style: { dot: { color: "red" } },
                 });
 
                 const develop = master.branch("develop");

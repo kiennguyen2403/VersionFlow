@@ -10,6 +10,9 @@ export default function PageWrapper() {
   const [selectedCommit, setSelectedCommit] = useState(null);
   const [value, setValue] = useState(0);
   const [boardId, setBoardId] = useState("");
+  const [options, setOptions] = useState({
+    template: "metro",
+  });
 
   useEffect(() => {
     async function getBoard() {
@@ -29,6 +32,8 @@ export default function PageWrapper() {
             selectedCommit={selectedCommit}
             setSelectedCommit={setSelectedCommit}
             setValue={setValue}
+            options={options}
+            setOptions={setOptions}
           />
         </div>
         <div className="cs1 ce12">
